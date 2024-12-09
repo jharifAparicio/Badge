@@ -43,7 +43,4 @@ function generateBadge() {
     </svg>`;
 }
 
-window.onload = () => {
-    document.body.innerHTML = generateBadge();
-    document.body.style.margin = 0;
-}
+document.write(generateBadge());
