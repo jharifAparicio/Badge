@@ -1,7 +1,7 @@
 function obtenerValores(name) {
     const pathUrl = new URLSearchParams(window.location.search);
     const valor = pathUrl.get(name);
-    console.log(valor);
+    console.log(pathUrl);
     return valor;
 }
 
