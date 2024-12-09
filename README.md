@@ -9,4 +9,4 @@ en el link deben colocar: `https://jharifaparicio.github.io/Badge/?shortname=Ts&
 - color = el color representativo del lenguaje de programacion
 
 ejemplo:
-![[Typescript](https://jharifaparicio.github.io/Badge/?shortname=Ts&name=TypeScript&color=3178C6)](https://www.typescriptlang.org/)
+[![Typescript](https://jharifaparicio.github.io/Badge/?shortname=Ts&name=TypeScript&color=3178C6)](https://www.typescriptlang.org/)
