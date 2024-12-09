@@ -6,8 +6,6 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
     <title>Badge personalizado</title>
-    <script src="script.js"
-        defer></script>
 </head>
 
 <body>
@@ -18,14 +16,26 @@
     function obtenerValores(name) {
         const pathUrl = new URLSearchParams(window.location.search);
         const valor = pathUrl.get(name);
-        console.log(pathUrl);
+        console.log(valor);
         return valor;
     }
 
     function generateBadge() {
-        const ShortName = obtenerValores('shortname') || 'Js';
-        const name = obtenerValores('name') || 'JavaScript';
-        const backgroundColor = `#${obtenerValores('color')}` || '#F7DF1E';
+        var ShortName = 'Js';
+        var name = 'JavaScript';
+        var backgroundColor = '#F7DF1E';
+
+        if (obtenerValores('shortname') !== null) {
+            ShortName = obtenerValores('shortname');
+        }
+
+        if (obtenerValores('name') !== null) {
+            name = obtenerValores('name');
+        }
+
+        if (obtenerValores('color') !== null) {
+            backgroundColor = `#${obtenerValores('color')}`;
+        }
 
         svg = `
         <svg xmlns="http://www.w3.org/2000/svg" width="132" height="20" role="img" aria-label="${ShortName}: ${name}">
