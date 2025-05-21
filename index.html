@@ -33,6 +33,26 @@
             return pathUrl.get(name);
         }
 
+        function getTextWidth(text, font = "11px Verdana,Geneva,DejaVu Sans,sans-serif") {
+            const svgNS = "http://www.w3.org/2000/svg";
+            const tempSvg = document.createElementNS(svgNS, "svg");
+            tempSvg.setAttribute("width", "0");
+            tempSvg.setAttribute("height", "0");
+            tempSvg.style.position = "absolute";
+            tempSvg.style.visibility = "hidden";
+            
+            const tempText = document.createElementNS(svgNS, "text");
+            tempText.setAttribute("font-family", "Verdana,Geneva,DejaVu Sans,sans-serif");
+            tempText.setAttribute("font-size", "11px"); // Effective font size after scaling
+            tempText.textContent = text;
+            
+            tempSvg.appendChild(tempText);
+            document.body.appendChild(tempSvg);
+            const width = tempText.getComputedTextLength();
+            document.body.removeChild(tempSvg);
+            return width;
+        }
+
         function generateBadge() {
             var ShortName = 'Js';
             var name = 'JavaScript';
@@ -50,12 +70,46 @@
                 backgroundColor = `#${obtenerValores('color')}`;
             }
 
+            const padding = 15; // pixels
+            const shortNameActualWidth = getTextWidth(ShortName);
+            const nameActualWidth = getTextWidth(name);
+
+            const shortNameTextWidth = shortNameActualWidth + padding;
+            const nameTextWidth = nameActualWidth + padding;
+            
+            const totalWidth = shortNameTextWidth + nameTextWidth;
+
             const svgElement = document.getElementById('badge');
-            svgElement.querySelector('rect:nth-of-type(2)').setAttribute('fill', backgroundColor);
-            svgElement.querySelector('text:nth-of-type(1)').textContent = ShortName;
-            svgElement.querySelector('text:nth-of-type(2)').textContent = ShortName;
-            svgElement.querySelector('text:nth-of-type(3)').textContent = name;
-            svgElement.querySelector('text:nth-of-type(4)').textContent = name;
+            svgElement.setAttribute('width', totalWidth.toString());
+            svgElement.setAttribute('aria-label', `${ShortName}: ${name}`);
+
+            const clipPathRect = svgElement.querySelector('clipPath rect');
+            clipPathRect.setAttribute('width', totalWidth.toString());
+
+            const rects = svgElement.querySelectorAll('g[clip-path="url(#r)"] rect');
+            // First rectangle (shortname background)
+            rects[0].setAttribute('width', shortNameTextWidth.toString());
+            // Second rectangle (name background)
+            rects[1].setAttribute('x', shortNameTextWidth.toString());
+            rects[1].setAttribute('width', nameTextWidth.toString());
+            rects[1].setAttribute('fill', backgroundColor);
+            // Third rectangle (gradient overlay)
+            rects[2].setAttribute('width', totalWidth.toString());
+            
+            const textElements = svgElement.querySelectorAll('g[fill="#fff"] text');
+            // ShortName Text (shadow and main)
+            const shortNameTextX = (shortNameTextWidth / 2) * 10;
+            textElements[0].textContent = ShortName;
+            textElements[0].setAttribute('x', shortNameTextX.toString());
+            textElements[1].textContent = ShortName;
+            textElements[1].setAttribute('x', shortNameTextX.toString());
+            
+            // Name Text (shadow and main)
+            const nameTextX = (shortNameTextWidth + (nameTextWidth / 2)) * 10;
+            textElements[2].textContent = name;
+            textElements[2].setAttribute('x', nameTextX.toString());
+            textElements[3].textContent = name;
+            textElements[3].setAttribute('x', nameTextX.toString());
         }
 
         document.addEventListener('DOMContentLoaded', generateBadge);
